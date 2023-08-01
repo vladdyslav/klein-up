@@ -781,7 +781,7 @@ class Klein
             E_NOTICE | E_WARNING
         );
 
-        if (false === preg_match($regex, null) || !empty($error_string)) {
+        if (false === preg_match($regex, '') || !empty($error_string)) {
             // Remove our temporary error handler
             restore_error_handler();
 
@@ -1083,7 +1083,7 @@ class Klein
      */
     public function skipThis()
     {
-        throw new DispatchHaltedException(null, DispatchHaltedException::SKIP_THIS);
+        throw new DispatchHaltedException('', DispatchHaltedException::SKIP_THIS);
     }
 
     /**
@@ -1095,7 +1095,7 @@ class Klein
      */
     public function skipNext($num = 1)
     {
-        $skip = new DispatchHaltedException(null, DispatchHaltedException::SKIP_NEXT);
+        $skip = new DispatchHaltedException('', DispatchHaltedException::SKIP_NEXT);
         $skip->setNumberOfSkips($num);
 
         throw $skip;
@@ -1109,7 +1109,7 @@ class Klein
      */
     public function skipRemaining()
     {
-        throw new DispatchHaltedException(null, DispatchHaltedException::SKIP_REMAINING);
+        throw new DispatchHaltedException('', DispatchHaltedException::SKIP_REMAINING);
     }
 
     /**

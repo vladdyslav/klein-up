@@ -23,6 +23,7 @@ use Klein\Response;
 use Klein\Route;
 use Klein\ServiceProvider;
 use OutOfBoundsException;
+use Klein\Exceptions\UnhandledException;
 
 /**
  * KleinTest
@@ -369,14 +370,12 @@ class KleinTest extends AbstractKleinTest
 
         $this->klein_app->dispatch();
 
-        $this->expectOutputString(null);
+        $this->expectOutputString('');
     }
 
-    /**
-     * @expectedException Klein\Exceptions\UnhandledException
-     */
     public function testAfterDispatchWithCallableThatThrowsException()
     {
+        $this->expectException(UnhandledException::class);
         $this->klein_app->afterDispatch(
             function ($klein) {
                 throw new Exception('testing');
@@ -391,11 +390,9 @@ class KleinTest extends AbstractKleinTest
         );
     }
 
-    /**
-     * @expectedException \Klein\Exceptions\UnhandledException
-     */
     public function testErrorsWithNoCallbacks()
     {
+        $this->expectException(UnhandledException::class);
         $this->klein_app->respond(
             function ($request, $response, $service) {
                 throw new Exception('testing');

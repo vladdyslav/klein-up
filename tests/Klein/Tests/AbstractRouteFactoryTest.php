@@ -41,7 +41,7 @@ class AbstractRouteFactoryTest extends AbstractKleinTest
         $methods_to_mock = $methods_to_mock ?: $this->getDefaultMethodsToMock();
 
         return $this->getMockBuilder('\Klein\AbstractRouteFactory')
-            ->setMethods($methods_to_mock);
+            ->onlyMethods($methods_to_mock);
     }
 
 

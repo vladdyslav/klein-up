@@ -25,6 +25,7 @@ use Klein\ServiceProvider;
 use Klein\Tests\Mocks\HeadersEcho;
 use Klein\Tests\Mocks\HeadersSave;
 use Klein\Tests\Mocks\MockRequestFactory;
+use Klein\Exceptions\UnhandledException;
 
 /**
  * RoutingTest
@@ -1836,11 +1837,9 @@ class RoutingTest extends AbstractKleinTest
         $this->assertSame($test_code, $this->klein_app->response()->code());
     }
 
-    /**
-     * @expectedException Klein\Exceptions\UnhandledException
-     */
     public function testDispatchExceptionRethrowsUnknownCode()
     {
+        $this->expectException(UnhandledException::class);
         $this->expectOutputString('');
 
         $test_message = 'whatever';

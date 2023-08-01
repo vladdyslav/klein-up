@@ -19,3 +19,5 @@ $autoloader->add('Klein\Tests', __DIR__);
 
 // Load our functions bootstrap
 require(__DIR__ . '/functions-bootstrap.php');
+
+//error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
