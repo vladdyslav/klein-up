@@ -29,10 +29,10 @@ class Response extends AbstractResponse
      *
      * @link https://github.com/klein/klein.php/wiki/Response-Chunking
      * @link http://bit.ly/hg3gHb
-     * @param string $str   An optional string to send as a response "chunk"
+     * @param string|null $str   An optional string to send as a response "chunk"
      * @return Response
      */
-    public function chunk($str = null)
+    public function chunk(string $str = null): AbstractResponse
     {
         parent::chunk();
 
@@ -51,7 +51,7 @@ class Response extends AbstractResponse
      * @param mixed $obj    The variable to dump
      * @return Response
      */
-    public function dump($obj)
+    public function dump(mixed $obj): Response
     {
         if (is_array($obj) || is_object($obj)) {
             $obj = print_r($obj, true);
@@ -75,12 +75,12 @@ class Response extends AbstractResponse
      * the file's data
      *
      * @param string $path      The path of the file to send
-     * @param string $filename  The file's name
-     * @param string $mimetype  The MIME type of the file
-     * @throws RuntimeException Thrown if the file could not be read
+     * @param string|null $filename  The file's name
+     * @param string|null $mimetype  The MIME type of the file
      * @return Response
+     *@throws RuntimeException Thrown if the file could not be read
      */
-    public function file($path, $filename = null, $mimetype = null)
+    public function file(string $path, string|null $filename = null, string|null $mimetype = null): Response
     {
         if ($this->sent) {
             throw new ResponseAlreadySentException('Response has already been sent');
@@ -142,10 +142,10 @@ class Response extends AbstractResponse
      * the passed json encoded object
      *
      * @param mixed $object         The data to encode as JSON
-     * @param string $jsonp_prefix  The name of the JSON-P function prefix
+     * @param string|null $jsonp_prefix  The name of the JSON-P function prefix
      * @return Response
      */
-    public function json($object, $jsonp_prefix = null)
+    public function json(mixed $object, string|null $jsonp_prefix = null): Response
     {
         $this->body('');
         $this->noCache();

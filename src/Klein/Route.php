@@ -47,7 +47,7 @@ class Route
      *
      * @type string
      */
-    protected $path;
+    protected string $path = '';
 
     /**
      * The HTTP method to match
@@ -58,25 +58,25 @@ class Route
      * - 'POST'
      * - array('GET', 'POST')
      *
-     * @type string|array
+     * @type string|array|null
      */
-    protected $method;
+    protected string|array|null $method = null;
 
     /**
-     * Whether or not to count this route as a match when counting total matches
+     * Whether to count this route as a match when counting total matches
      *
-     * @type boolean
+     * @type boolean|null
      */
-    protected $count_match;
+    protected bool|null $count_match = null;
 
     /**
      * The name of the route
      *
      * Mostly used for reverse routing
      *
-     * @type string
+     * @type string|null
      */
-    protected $name;
+    protected string|null $name = null;
 
 
     /**
@@ -87,11 +87,12 @@ class Route
      * Constructor
      *
      * @param callable $callback
-     * @param string $path
-     * @param string|array $method
+     * @param string|null $path
+     * @param array|string|null $method
      * @param boolean $count_match
+     * @param string|null $name
      */
-    public function __construct($callback, $path = null, $method = null, $count_match = true, $name = null)
+    public function __construct(callable $callback, string|null $path = null, array|string|null $method = null, bool|null $count_match = true, string|null $name = null)
     {
         // Initialize some properties (use our setters so we can validate param types)
         $this->setCallback($callback);
@@ -106,7 +107,7 @@ class Route
      *
      * @return callable
      */
-    public function getCallback()
+    public function getCallback(): callable
     {
         return $this->callback;
     }
@@ -115,17 +116,16 @@ class Route
      * Set the callback
      *
      * @param callable $callback
-     * @throws InvalidArgumentException If the callback isn't a callable
      * @return Route
+     * @throws InvalidArgumentException If the callback isn't a callable
      */
-    public function setCallback($callback)
+    public function setCallback(callable $callback): Route
     {
-        if (!is_callable($callback)) {
-            throw new InvalidArgumentException('Expected a callable. Got an uncallable '. gettype($callback));
-        }
-
+        // not possible with strict typing
+//        if (!is_callable($callback)) {
+//            throw new InvalidArgumentException('Expected a callable. Got an uncallable '. gettype($callback));
+//        }
         $this->callback = $callback;
-
         return $this;
     }
 
@@ -134,7 +134,7 @@ class Route
      *
      * @return string
      */
-    public function getPath()
+    public function getPath(): string
     {
         return $this->path;
     }
@@ -142,22 +142,21 @@ class Route
     /**
      * Set the path
      *
-     * @param string $path
+     * @param string|null $path
      * @return Route
      */
-    public function setPath($path)
+    public function setPath(string|null $path): Route
     {
         $this->path = (string) $path;
-
         return $this;
     }
 
     /**
      * Get the method
      *
-     * @return string|array
+     * @return array|string|null
      */
-    public function getMethod()
+    public function getMethod(): array|string|null
     {
         return $this->method;
     }
@@ -165,28 +164,27 @@ class Route
     /**
      * Set the method
      *
-     * @param string|array|null $method
-     * @throws InvalidArgumentException If a non-string or non-array type is passed
+     * @param array|string|null $method
      * @return Route
+     *@throws InvalidArgumentException If a non-string or non-array type is passed
      */
-    public function setMethod($method)
+    public function setMethod(array|string|null $method): Route
     {
+        // Not possible with strict typing
         // Allow null, otherwise expect an array or a string
-        if (null !== $method && !is_array($method) && !is_string($method)) {
-            throw new InvalidArgumentException('Expected an array or string. Got a '. gettype($method));
-        }
-
+        // if (null !== $method && !is_array($method) && !is_string($method)) {
+        //     throw new InvalidArgumentException('Expected an array or string. Got a '. gettype($method));
+        // }
         $this->method = $method;
-
         return $this;
     }
 
     /**
      * Get the count_match
      *
-     * @return boolean
+     * @return bool|null
      */
-    public function getCountMatch()
+    public function getCountMatch(): bool|null
     {
         return $this->count_match;
     }
@@ -194,22 +192,21 @@ class Route
     /**
      * Set the count_match
      *
-     * @param boolean $count_match
+     * @param boolean|null $count_match
      * @return Route
      */
-    public function setCountMatch($count_match)
+    public function setCountMatch(bool|null $count_match): Route
     {
         $this->count_match = (boolean) $count_match;
-
         return $this;
     }
 
     /**
      * Get the name
      *
-     * @return string
+     * @return string|null
      */
-    public function getName()
+    public function getName(): string|null
     {
         return $this->name;
     }
@@ -217,17 +214,12 @@ class Route
     /**
      * Set the name
      *
-     * @param string $name
+     * @param string|null $name
      * @return Route
      */
-    public function setName($name)
+    public function setName(string|null $name): Route
     {
-        if (null !== $name) {
-            $this->name = (string) $name;
-        } else {
-            $this->name = $name;
-        }
-
+        $this->name = $name;
         return $this;
     }
 
@@ -237,10 +229,10 @@ class Route
      *
      * Allows the ability to arbitrarily call this instance like a function
      *
-     * @param mixed $args Generic arguments, magically accepted
+     * @param mixed|null $args Generic arguments, magically accepted
      * @return mixed
      */
-    public function __invoke($args = null)
+    public function __invoke(mixed $args = null): mixed
     {
         $args = func_get_args();
 

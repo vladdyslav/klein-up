@@ -56,7 +56,7 @@ class DispatchHaltedException extends RuntimeException implements KleinException
      *
      * @type int
      */
-    protected $number_of_skips = 1;
+    protected int $number_of_skips = 1;
 
 
     /**
@@ -68,7 +68,7 @@ class DispatchHaltedException extends RuntimeException implements KleinException
      *
      * @return int
      */
-    public function getNumberOfSkips()
+    public function getNumberOfSkips(): int
     {
         return $this->number_of_skips;
     }
@@ -79,9 +79,9 @@ class DispatchHaltedException extends RuntimeException implements KleinException
      * @param int $number_of_skips
      * @return DispatchHaltedException
      */
-    public function setNumberOfSkips($number_of_skips)
+    public function setNumberOfSkips(int $number_of_skips): DispatchHaltedException
     {
-        $this->number_of_skips = (int) $number_of_skips;
+        $this->number_of_skips = $number_of_skips;
 
         return $this;
     }

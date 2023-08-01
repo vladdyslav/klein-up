@@ -29,28 +29,28 @@ class Validator
      *
      * @type array
      */
-    public static $methods = array();
+    public static array $methods = array();
 
     /**
      * The string to validate
      *
-     * @type string
+     * @type string|null
      */
-    protected $str;
+    protected string|null $str = null;
 
     /**
      * The custom exception message to throw on validation failure
      *
-     * @type string
+     * @type mixed
      */
-    protected $err;
+    protected mixed $err = null;
 
     /**
      * Flag for whether the default validation methods have been added or not
      *
      * @type boolean
      */
-    protected static $default_added = false;
+    protected static bool $default_added = false;
 
 
     /**
@@ -60,10 +60,10 @@ class Validator
     /**
      * Sets up the validator chain with the string and optional error message
      *
-     * @param string $str   The string to validate
-     * @param string $err   The optional custom exception message to throw on validation failure
+     * @param string|null $str The string to validate
+     * @param mixed|null $err The optional custom exception message to throw on validation failure
      */
-    public function __construct($str, $err = null)
+    public function __construct(string|null $str, mixed $err = null)
     {
         $this->str = $str;
         $this->err = $err;
@@ -78,7 +78,7 @@ class Validator
      *
      * @return void
      */
-    public static function addDefault()
+    public static function addDefault(): void
     {
         static::$methods['null'] = function ($str) {
             return $str === null || $str === '';
@@ -131,7 +131,7 @@ class Validator
      * @param callable $callback    The callback to perform on validation
      * @return void
      */
-    public static function addValidator($method, $callback)
+    public static function addValidator(string $method, callable $callback): void
     {
         static::$methods[strtolower($method)] = $callback;
     }
@@ -144,11 +144,11 @@ class Validator
      *
      * @param string $method            The callable method to execute
      * @param array $args               The argument array to pass to our callback
-     * @throws BadMethodCallException   If an attempt was made to call a validator modifier that doesn't exist
-     * @throws ValidationException      If the validation check returns false
      * @return Validator|boolean
+     *@throws ValidationException      If the validation check returns false
+     * @throws BadMethodCallException   If an attempt was made to call a validator modifier that doesn't exist
      */
-    public function __call($method, $args)
+    public function __call(string $method, array $args)
     {
         $reverse = false;
         $validator = $method;
@@ -184,6 +184,7 @@ class Validator
                 $result = $validator($args[0], $args[1], $args[2], $args[3]);
                 break;
             default:
+                // var_dump($args);
                 $result = call_user_func_array($validator, $args);
                 break;
         }

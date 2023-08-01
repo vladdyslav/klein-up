@@ -34,7 +34,7 @@ class ServerDataCollection extends DataCollection
      *
      * @type string
      */
-    protected static $http_header_prefix = 'HTTP_';
+    protected static string $http_header_prefix = 'HTTP_';
 
     /**
      * The list of HTTP headers that for some
@@ -42,7 +42,7 @@ class ServerDataCollection extends DataCollection
      *
      * @type array
      */
-    protected static $http_nonprefixed_headers = array(
+    protected static array $http_nonprefixed_headers = array(
         'CONTENT_LENGTH',
         'CONTENT_TYPE',
         'CONTENT_MD5',
@@ -60,7 +60,7 @@ class ServerDataCollection extends DataCollection
      * @param string $prefix    The prefix to test
      * @return boolean
      */
-    public static function hasPrefix($string, $prefix)
+    public static function hasPrefix(string $string, string $prefix): bool
     {
         if (strpos($string, $prefix) === 0) {
             return true;
@@ -72,12 +72,12 @@ class ServerDataCollection extends DataCollection
     /**
      * Get our headers from our server data collection
      *
-     * PHP is weird... it puts all of the HTTP request
+     * PHP is weird... it puts all the HTTP request
      * headers in the $_SERVER array. This handles that
      *
      * @return array
      */
-    public function getHeaders()
+    public function getHeaders(): array
     {
         // Define a headers array
         $headers = array();

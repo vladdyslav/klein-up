@@ -30,6 +30,7 @@ class ResponseCookieDataCollection extends DataCollection
      *
      * @override (doesn't call our parent)
      * @param array $cookies The cookies of this collection
+     * @noinspection PhpMissingParentConstructorInspection
      */
     public function __construct(array $cookies = array())
     {
@@ -57,7 +58,7 @@ class ResponseCookieDataCollection extends DataCollection
      * @param ResponseCookie|string $value  The value of the cookie to set
      * @return ResponseCookieDataCollection
      */
-    public function set($key, $value)
+    public function set($key, $value): ResponseCookieDataCollection
     {
         if (!$value instanceof ResponseCookie) {
             $value = new ResponseCookie($key, $value);

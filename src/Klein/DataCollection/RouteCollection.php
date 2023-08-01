@@ -30,6 +30,7 @@ class RouteCollection extends DataCollection
      *
      * @override (doesn't call our parent)
      * @param array $routes The routes of this collection
+     * @noinspection PhpMissingParentConstructorInspection
      */
     public function __construct(array $routes = array())
     {
@@ -56,7 +57,7 @@ class RouteCollection extends DataCollection
      * @param Route|callable $value         The value of the route to set
      * @return RouteCollection
      */
-    public function set($key, $value)
+    public function set($key, $value): RouteCollection
     {
         if (!$value instanceof Route) {
             $value = new Route($value);
@@ -73,7 +74,7 @@ class RouteCollection extends DataCollection
      * @param Route $route
      * @return RouteCollection
      */
-    public function addRoute(Route $route)
+    public function addRoute(Route $route): RouteCollection
     {
         /**
          * Auto-generate a name from the object's hash
@@ -92,10 +93,10 @@ class RouteCollection extends DataCollection
      * will take a Route instance, string callable
      * or any other Route class compatible callback
      *
-     * @param Route|callable $route
+     * @param callable|Route $route
      * @return RouteCollection
      */
-    public function add($route)
+    public function add(callable|Route $route): RouteCollection
     {
         if (!$route instanceof Route) {
             $route = new Route($route);
@@ -116,7 +117,7 @@ class RouteCollection extends DataCollection
      *
      * @return RouteCollection
      */
-    public function prepareNamed()
+    public function prepareNamed(): RouteCollection
     {
         // Create a new collection so we can keep our order
         $prepared = new static();

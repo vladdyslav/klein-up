@@ -162,21 +162,23 @@ class RouteTest extends AbstractKleinTest
      * Exception tests
      */
 
-    public function testCallbackSetWithIncorrectType()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $route = new Route($this->getTestCallable());
+    // Not possible with strict typing
+    //    public function testCallbackSetWithIncorrectType()
+    //    {
+    //        $this->expectException(InvalidArgumentException::class);
+    //        $route = new Route($this->getTestCallable());
+    //
+    //        // Test setting with the WRONG type
+    //        $route->setCallback(100);
+    //    }
 
-        // Test setting with the WRONG type
-        $route->setCallback(100);
-    }
-
-    public function testMethodSetWithIncorrectType()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $route = new Route($this->getTestCallable());
-
-        // Test setting with the WRONG type
-        $route->setMethod(100);
-    }
+    // Not possible with strict typing
+    //    public function testMethodSetWithIncorrectType()
+    //    {
+    //        $this->expectException(InvalidArgumentException::class);
+    //        $route = new Route($this->getTestCallable());
+    //
+    //        // Test setting with the WRONG type
+    //        $route->setMethod(100);
+    //    }
 }

@@ -37,8 +37,7 @@ class DataCollection implements IteratorAggregate, ArrayAccess, Countable
      *
      * @type array
      */
-    protected $attributes = array();
-
+    protected array $attributes = array();
 
     /**
      * Methods
@@ -61,11 +60,11 @@ class DataCollection implements IteratorAggregate, ArrayAccess, Countable
      * returns the keys that match the mask
      *
      * @param array $mask               The parameter mask array
-     * @param boolean $fill_with_nulls  Whether or not to fill the returned array with
+     * @param boolean $fill_with_nulls  Whether to fill the returned array with
      *  values to match the given mask, even if they don't exist in the collection
      * @return array
      */
-    public function keys($mask = null, $fill_with_nulls = true)
+    public function keys($mask = null, $fill_with_nulls = true): ?array
     {
         if (null !== $mask) {
             // Support a more "magical" call
@@ -147,7 +146,7 @@ class DataCollection implements IteratorAggregate, ArrayAccess, Countable
      * @param mixed  $default_val   The default value of the parameter if it contains no value
      * @return mixed
      */
-    public function get($key, $default_val = null)
+    public function get($key, $default_val = null): mixed
     {
         if (isset($this->attributes[$key])) {
             return $this->attributes[$key];
@@ -221,7 +220,7 @@ class DataCollection implements IteratorAggregate, ArrayAccess, Countable
      * @param string $key   The name of the parameter
      * @return boolean
      */
-    public function exists($key)
+    public function exists($key): bool
     {
         // Don't use "isset", since it returns false for null values
         return array_key_exists($key, $this->attributes);
@@ -233,7 +232,7 @@ class DataCollection implements IteratorAggregate, ArrayAccess, Countable
      * @param string $key   The name of the parameter
      * @return void
      */
-    public function remove($key)
+    public function remove($key): void
     {
         unset($this->attributes[$key]);
     }
@@ -255,7 +254,7 @@ class DataCollection implements IteratorAggregate, ArrayAccess, Countable
      *
      * @return boolean
      */
-    public function isEmpty()
+    public function isEmpty(): bool
     {
         return empty($this->attributes);
     }
@@ -350,10 +349,10 @@ class DataCollection implements IteratorAggregate, ArrayAccess, Countable
      *
      * IteratorAggregate interface required method
      *
-     * @see \IteratorAggregate::getIterator()
+     * @see IteratorAggregate::getIterator
      * @return ArrayIterator
      */
-    public function getIterator()
+    public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->attributes);
     }
@@ -363,12 +362,12 @@ class DataCollection implements IteratorAggregate, ArrayAccess, Countable
      *
      * Allows the access of attributes of this instance while treating it like an array
      *
-     * @see \ArrayAccess::offsetGet()
+     * @see ArrayAccess::offsetGet()
      * @see get()
      * @param string $key   The name of the parameter to return
      * @return mixed
      */
-    public function offsetGet($key)
+    public function offsetGet($key): mixed
     {
         return $this->get($key);
     }
@@ -384,7 +383,7 @@ class DataCollection implements IteratorAggregate, ArrayAccess, Countable
      * @param mixed  $value The value of the parameter to set
      * @return void
      */
-    public function offsetSet($key, $value)
+    public function offsetSet($key, $value): void
     {
         $this->set($key, $value);
     }
@@ -399,7 +398,7 @@ class DataCollection implements IteratorAggregate, ArrayAccess, Countable
      * @param string $key   The name of the parameter
      * @return boolean
      */
-    public function offsetExists($key)
+    public function offsetExists($key): bool
     {
         return $this->exists($key);
     }
@@ -414,7 +413,7 @@ class DataCollection implements IteratorAggregate, ArrayAccess, Countable
      * @param string $key   The name of the parameter
      * @return void
      */
-    public function offsetUnset($key)
+    public function offsetUnset($key): void
     {
         $this->remove($key);
     }
@@ -428,7 +427,7 @@ class DataCollection implements IteratorAggregate, ArrayAccess, Countable
      * @see \Countable::count()
      * @return int
      */
-    public function count()
+    public function count(): int
     {
         return count($this->attributes);
     }

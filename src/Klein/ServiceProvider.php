@@ -29,44 +29,44 @@ class ServiceProvider
     /**
      * The Request instance containing HTTP request data and behaviors
      *
-     * @type Request
+     * @type Request|null
      */
-    protected $request;
+    protected Request|null $request = null;
 
     /**
      * The Response instance containing HTTP response data and behaviors
      *
-     * @type AbstractResponse
+     * @type AbstractResponse|null
      */
-    protected $response;
+    protected AbstractResponse|null $response = null;
 
     /**
      * The id of the current PHP session
      *
-     * @type string|boolean
+     * @type string|boolean|null
      */
-    protected $session_id;
+    protected string|bool|null $session_id = null;
 
     /**
      * The view layout
      *
-     * @type string
+     * @type string|null
      */
-    protected $layout;
+    protected string|null $layout = null;
 
     /**
      * The view to render
      *
-     * @type string
+     * @type string|null
      */
-    protected $view;
+    protected string|null $view = null;
 
     /**
      * Shared data collection
      *
-     * @type DataCollection
+     * @type DataCollection|null
      */
-    protected $shared_data;
+    protected DataCollection|null $shared_data = null;
 
 
     /**
@@ -76,8 +76,8 @@ class ServiceProvider
     /**
      * Constructor
      *
-     * @param Request $request              Object containing all HTTP request data and behaviors
-     * @param AbstractResponse $response    Object containing all HTTP response data and behaviors
+     * @param Request|null $request              Object containing all HTTP request data and behaviors
+     * @param AbstractResponse|null $response    Object containing all HTTP response data and behaviors
      */
     public function __construct(Request $request = null, AbstractResponse $response = null)
     {
@@ -91,11 +91,11 @@ class ServiceProvider
     /**
      * Bind object instances to this service
      *
-     * @param Request $request              Object containing all HTTP request data and behaviors
-     * @param AbstractResponse $response    Object containing all HTTP response data and behaviors
+     * @param Request|null $request Object containing all HTTP request data and behaviors
+     * @param AbstractResponse|null $response Object containing all HTTP response data and behaviors
      * @return ServiceProvider
      */
-    public function bind(Request $request = null, AbstractResponse $response = null)
+    public function bind(Request $request = null, AbstractResponse $response = null): ServiceProvider
     {
         // Keep references
         $this->request  = $request  ?: $this->request;
@@ -107,9 +107,9 @@ class ServiceProvider
     /**
      * Returns the shared data collection object
      *
-     * @return \Klein\DataCollection\DataCollection
+     * @return DataCollection|null
      */
-    public function sharedData()
+    public function sharedData(): DataCollection|null
     {
         return $this->shared_data;
     }
@@ -119,9 +119,9 @@ class ServiceProvider
      *
      * This will start a session if the current session id is null
      *
-     * @return string|false
+     * @return bool|string|null
      */
-    public function startSession()
+    public function startSession(): bool|string|null
     {
         if (session_id() === '') {
             // Attempt to start a session
@@ -136,12 +136,12 @@ class ServiceProvider
     /**
      * Stores a flash message of $type
      *
-     * @param string $msg       The message to flash
-     * @param string $type      The flash message type
-     * @param array $params     Optional params to be parsed by markdown
+     * @param string $msg The message to flash
+     * @param string|array $type The flash message type
+     * @param array|null $params Optional params to be parsed by markdown
      * @return void
      */
-    public function flash($msg, $type = 'info', $params = null)
+    public function flash(string $msg, string|array $type = 'info', array $params = null): void
     {
         $this->startSession();
         if (is_array($type)) {
@@ -159,10 +159,10 @@ class ServiceProvider
     /**
      * Returns and clears all flashes of optional $type
      *
-     * @param string $type  The name of the flash message type
+     * @param string|null $type  The name of the flash message type
      * @return array
      */
-    public function flashes($type = null)
+    public function flashes(string $type = null): array
     {
         $this->startSession();
 
@@ -192,11 +192,11 @@ class ServiceProvider
      * Also, this method takes in EITHER an array of optional arguments (as the second parameter)
      * ... OR this method will simply take a variable number of arguments (after the initial str arg)
      *
-     * @param string $str   The text string to parse
-     * @param array $args   Optional arguments to be parsed by markdown
+     * @param string $str The text string to parse
+     * @param string|array|null $args Optional arguments to be parsed by markdown
      * @return string
      */
-    public static function markdown($str, $args = null)
+    public static function markdown(string $str, string|array $args = null): string
     {
         // Create our markdown parse/conversion regex's
         $md = array(
@@ -236,7 +236,7 @@ class ServiceProvider
      * @param int $flags    A bitmask of `htmlentities()` compatible flags
      * @return string
      */
-    public static function escape($str, $flags = ENT_QUOTES)
+    public static function escape(string $str, int $flags = ENT_QUOTES): string
     {
         return htmlentities($str, $flags, 'UTF-8');
     }
@@ -246,7 +246,7 @@ class ServiceProvider
      *
      * @return ServiceProvider
      */
-    public function refresh()
+    public function refresh(): ServiceProvider
     {
         $this->response->redirect(
             $this->request->uri()
@@ -260,7 +260,7 @@ class ServiceProvider
      *
      * @return ServiceProvider
      */
-    public function back()
+    public function back(): ServiceProvider
     {
         $referer = $this->request->server()->get('HTTP_REFERER');
 
@@ -279,8 +279,8 @@ class ServiceProvider
      * Simply calling this method without any arguments returns the current layout.
      * Calling with an argument, however, sets the layout to what was provided by the argument.
      *
-     * @param string $layout    The layout of the view
-     * @return string|ServiceProvider
+     * @param string|null $layout The layout of the view
+     * @return ServiceProvider|string|null
      */
     public function layout($layout = null)
     {
@@ -364,8 +364,8 @@ class ServiceProvider
     /**
      * Start a validator chain for the specified string
      *
-     * @param string $string    The string to validate
-     * @param string $err       The custom exception message to throw
+     * @param string|null $string $string    The string to validate
+     * @param string|null $err The custom exception message to throw
      * @return Validator
      */
     public function validate($string, $err = null)
@@ -377,7 +377,7 @@ class ServiceProvider
      * Start a validator chain for the specified parameter
      *
      * @param string $param     The name of the parameter to validate
-     * @param string $err       The custom exception message to throw
+     * @param string|null $err       The custom exception message to throw
      * @return Validator
      */
     public function validateParam($param, $err = null)
@@ -395,7 +395,7 @@ class ServiceProvider
      * @param string $key     The name of the shared data
      * @return boolean
      */
-    public function __isset($key)
+    public function __isset(string $key)
     {
         return $this->shared_data->exists($key);
     }
@@ -409,7 +409,7 @@ class ServiceProvider
      * @param string $key     The name of the shared data
      * @return string
      */
-    public function __get($key)
+    public function __get(string $key)
     {
         return $this->shared_data->get($key);
     }
@@ -424,7 +424,7 @@ class ServiceProvider
      * @param mixed $value      The value of the shared data
      * @return void
      */
-    public function __set($key, $value)
+    public function __set(string $key, mixed $value)
     {
         $this->shared_data->set($key, $value);
     }
@@ -438,7 +438,7 @@ class ServiceProvider
      * @param string $key     The name of the shared data
      * @return void
      */
-    public function __unset($key)
+    public function __unset(string $key)
     {
         $this->shared_data->remove($key);
     }

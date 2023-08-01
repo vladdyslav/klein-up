@@ -237,7 +237,7 @@ class Klein
      *
      * @return RouteCollection
      */
-    public function routes()
+    public function routes(): RouteCollection
     {
         return $this->routes;
     }
@@ -247,7 +247,7 @@ class Klein
      *
      * @return Request
      */
-    public function request()
+    public function request(): Request
     {
         return $this->request;
     }
@@ -255,9 +255,9 @@ class Klein
     /**
      * Returns the response object
      *
-     * @return Response
+     * @return AbstractResponse|Response
      */
-    public function response()
+    public function response(): AbstractResponse|Response
     {
         return $this->response;
     }
@@ -267,7 +267,7 @@ class Klein
      *
      * @return ServiceProvider
      */
-    public function service()
+    public function service(): ServiceProvider
     {
         return $this->service;
     }
@@ -277,7 +277,7 @@ class Klein
      *
      * @return mixed
      */
-    public function app()
+    public function app(): mixed
     {
         return $this->app;
     }
@@ -296,7 +296,7 @@ class Klein
      *  @named callable $callback       Callable callback method to execute on route match
      * @return array                    A named parameter array containing the keys: 'method', 'path', and 'callback'
      */
-    protected function parseLooseArgumentOrder(array $args)
+    protected function parseLooseArgumentOrder(array $args): array
     {
         // Get the arguments in a very loose format
         $callback = array_pop($args);
@@ -340,7 +340,7 @@ class Klein
      * @param callable $callback        Callable callback method to execute on route match
      * @return Route
      */
-    public function respond($method, $path = '*', $callback = null)
+    public function respond($method, $path = '*', $callback = null): Route
     {
         // Get the arguments in a very loose format
         extract(
@@ -642,8 +642,6 @@ class Klein
             }
 
         } catch (Throwable $e) { // PHP 7 compatibility
-            $this->error($e);
-        } catch (Exception $e) { // TODO: Remove this catch block once PHP 5.x support is no longer necessary.
             $this->error($e);
         }
 

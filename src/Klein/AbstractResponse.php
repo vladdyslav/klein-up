@@ -15,7 +15,6 @@ use Klein\DataCollection\HeaderDataCollection;
 use Klein\DataCollection\ResponseCookieDataCollection;
 use Klein\Exceptions\LockedResponseException;
 use Klein\Exceptions\ResponseAlreadySentException;
-use Klein\ResponseCookie;
 
 /**
  * AbstractResponse
@@ -32,64 +31,64 @@ abstract class AbstractResponse
      *
      * @type int
      */
-    protected static $default_status_code = 200;
+    protected static int $default_status_code = 200;
 
     /**
      * The HTTP version of the response
      *
      * @type string
      */
-    protected $protocol_version = '1.1';
+    protected string $protocol_version = '1.1';
 
     /**
      * The response body
      *
-     * @type string
+     * @type string|null
      */
-    protected $body;
+    protected string|null $body = null;
 
     /**
      * HTTP response status
      *
      * @type HttpStatus
      */
-    protected $status;
+    protected HttpStatus $status;
 
     /**
      * HTTP response headers
      *
      * @type HeaderDataCollection
      */
-    protected $headers;
+    protected HeaderDataCollection $headers;
 
     /**
      * HTTP response cookies
      *
      * @type ResponseCookieDataCollection
      */
-    protected $cookies;
+    protected ResponseCookieDataCollection $cookies;
 
     /**
-     * Whether or not the response is "locked" from
+     * Whether the response is "locked" from
      * any further modification
      *
      * @type boolean
      */
-    protected $locked = false;
+    protected bool $locked = false;
 
     /**
-     * Whether or not the response has been sent
+     * Whether the response has been sent
      *
      * @type boolean
      */
-    protected $sent = false;
+    protected bool $sent = false;
 
     /**
      * Whether the response has been chunked or not
      *
      * @type boolean
      */
-    public $chunked = false;
+    public bool $chunked = false;
 
 
     /**
@@ -101,11 +100,11 @@ abstract class AbstractResponse
      *
      * Create a new AbstractResponse object with a dependency injected Headers instance
      *
-     * @param string $body          The response body's content
-     * @param int $status_code      The status code
+     * @param string|null $body          The response body's content
+     * @param int|null $status_code      The status code
      * @param array $headers        The response header "hash"
      */
-    public function __construct($body = '', $status_code = null, array $headers = array())
+    public function __construct(string|null $body = '', int $status_code = null, array $headers = array())
     {
         $status_code   = $status_code ?: static::$default_status_code;
 
@@ -124,16 +123,16 @@ abstract class AbstractResponse
      * Calling with an integer argument, however, attempts to set the protocol version to what
      * was provided by the argument.
      *
-     * @param string $protocol_version
+     * @param string|null $protocol_version
      * @return string|AbstractResponse
      */
-    public function protocolVersion($protocol_version = null)
+    public function protocolVersion(string $protocol_version = null): AbstractResponse|string
     {
         if (null !== $protocol_version) {
             // Require that the response be unlocked before changing it
             $this->requireUnlocked();
 
-            $this->protocol_version = (string) $protocol_version;
+            $this->protocol_version = $protocol_version;
 
             return $this;
         }
@@ -147,16 +146,16 @@ abstract class AbstractResponse
      * Simply calling this method without any arguments returns the current response body.
      * Calling with an argument, however, sets the response body to what was provided by the argument.
      *
-     * @param string $body  The body content string
-     * @return string|AbstractResponse
+     * @param string|null $body  The body content string
+     * @return string|null|AbstractResponse
      */
-    public function body($body = null)
+    public function body(string|null $body = null): AbstractResponse|string|null
     {
         if (null !== $body) {
             // Require that the response be unlocked before changing it
             $this->requireUnlocked();
 
-            $this->body = (string) $body;
+            $this->body = $body;
 
             return $this;
         }
@@ -167,9 +166,9 @@ abstract class AbstractResponse
     /**
      * Returns the status object
      *
-     * @return \Klein\HttpStatus
+     * @return HttpStatus
      */
-    public function status()
+    public function status(): HttpStatus
     {
         return $this->status;
     }
@@ -179,7 +178,7 @@ abstract class AbstractResponse
      *
      * @return HeaderDataCollection
      */
-    public function headers()
+    public function headers(): HeaderDataCollection
     {
         return $this->headers;
     }
@@ -189,7 +188,7 @@ abstract class AbstractResponse
      *
      * @return ResponseCookieDataCollection
      */
-    public function cookies()
+    public function cookies(): ResponseCookieDataCollection
     {
         return $this->cookies;
     }
@@ -201,10 +200,10 @@ abstract class AbstractResponse
      * Calling with an integer argument, however, attempts to set the response code to what
      * was provided by the argument.
      *
-     * @param int $code     The HTTP status code to send
+     * @param int|null $code     The HTTP status code to send
      * @return int|AbstractResponse
      */
-    public function code($code = null)
+    public function code(int|null $code = null): AbstractResponse|int
     {
         if (null !== $code) {
             // Require that the response be unlocked before changing it
@@ -224,7 +223,7 @@ abstract class AbstractResponse
      * @param string $content   The string to prepend
      * @return AbstractResponse
      */
-    public function prepend($content)
+    public function prepend(string $content): AbstractResponse
     {
         // Require that the response be unlocked before changing it
         $this->requireUnlocked();
@@ -237,10 +236,10 @@ abstract class AbstractResponse
     /**
      * Append a string to the response's content body
      *
-     * @param string $content   The string to append
+     * @param string|null $content   The string to append
      * @return AbstractResponse
      */
-    public function append($content)
+    public function append(string|null $content): AbstractResponse
     {
         // Require that the response be unlocked before changing it
         $this->requireUnlocked();
@@ -255,7 +254,7 @@ abstract class AbstractResponse
      *
      * @return boolean
      */
-    public function isLocked()
+    public function isLocked(): bool
     {
         return $this->locked;
     }
@@ -270,7 +269,7 @@ abstract class AbstractResponse
      * @throws LockedResponseException  If the response is locked
      * @return AbstractResponse
      */
-    public function requireUnlocked()
+    public function requireUnlocked(): AbstractResponse
     {
         if ($this->isLocked()) {
             throw new LockedResponseException('Response is locked');
@@ -284,7 +283,7 @@ abstract class AbstractResponse
      *
      * @return AbstractResponse
      */
-    public function lock()
+    public function lock(): AbstractResponse
     {
         $this->locked = true;
 
@@ -296,7 +295,7 @@ abstract class AbstractResponse
      *
      * @return AbstractResponse
      */
-    public function unlock()
+    public function unlock(): AbstractResponse
     {
         $this->locked = false;
 
@@ -310,7 +309,7 @@ abstract class AbstractResponse
      *
      * @return string
      */
-    protected function httpStatusLine()
+    protected function httpStatusLine(): string
     {
         return sprintf('HTTP/%s %s', $this->protocol_version, $this->status);
     }
@@ -318,11 +317,11 @@ abstract class AbstractResponse
     /**
      * Send our HTTP headers
      *
-     * @param boolean $cookies_also Whether or not to also send the cookies after sending the normal headers
-     * @param boolean $override     Whether or not to override the check if headers have already been sent
+     * @param boolean $cookies_also Whether to also send the cookies after sending the normal headers
+     * @param boolean $override     Whether to override the check if headers have already been sent
      * @return AbstractResponse
      */
-    public function sendHeaders($cookies_also = true, $override = false)
+    public function sendHeaders(bool $cookies_also = true, bool $override = false): AbstractResponse
     {
         if (headers_sent() && !$override) {
             return $this;
@@ -346,10 +345,10 @@ abstract class AbstractResponse
     /**
      * Send our HTTP response cookies
      *
-     * @param boolean $override     Whether or not to override the check if headers have already been sent
+     * @param boolean $override     Whether to override the check if headers have already been sent
      * @return AbstractResponse
      */
-    public function sendCookies($override = false)
+    public function sendCookies(bool $override = false): AbstractResponse
     {
         if (headers_sent() && !$override) {
             return $this;
@@ -377,9 +376,9 @@ abstract class AbstractResponse
      *
      * @return AbstractResponse
      */
-    public function sendBody()
+    public function sendBody(): AbstractResponse
     {
-        echo (string) $this->body;
+        echo $this->body;
 
         return $this;
     }
@@ -387,11 +386,11 @@ abstract class AbstractResponse
     /**
      * Send the response and lock it
      *
-     * @param boolean $override             Whether or not to override the check if the response has already been sent
-     * @throws ResponseAlreadySentException If the response has already been sent
+     * @param boolean $override             Whether to override the check if the response has already been sent
      * @return AbstractResponse
+     *@throws ResponseAlreadySentException If the response has already been sent
      */
-    public function send($override = false)
+    public function send(bool $override = false): AbstractResponse
     {
         if ($this->sent && !$override) {
             throw new ResponseAlreadySentException('Response has already been sent');
@@ -420,7 +419,7 @@ abstract class AbstractResponse
      *
      * @return boolean
      */
-    public function isSent()
+    public function isSent(): bool
     {
         return $this->sent;
     }
@@ -432,7 +431,7 @@ abstract class AbstractResponse
      * @link http://bit.ly/hg3gHb
      * @return AbstractResponse
      */
-    public function chunk()
+    public function chunk(): AbstractResponse
     {
         if (false === $this->chunked) {
             $this->chunked = true;
@@ -458,7 +457,7 @@ abstract class AbstractResponse
      * @param mixed $value      The value to set the header with
      * @return AbstractResponse
      */
-    public function header($key, $value)
+    public function header(string $key, mixed $value): AbstractResponse
     {
         $this->headers->set($key, $value);
 
@@ -470,22 +469,23 @@ abstract class AbstractResponse
      *
      * @param string $key           The name of the cookie
      * @param string $value         The value to set the cookie with
-     * @param int $expiry           The time that the cookie should expire
+     * @param int|null $expiry           The time that the cookie should expire
      * @param string $path          The path of which to restrict the cookie
-     * @param string $domain        The domain of which to restrict the cookie
-     * @param boolean $secure       Flag of whether the cookie should only be sent over a HTTPS connection
+     * @param string|null $domain        The domain of which to restrict the cookie
+     * @param boolean $secure       Flag of whether the cookie should only be sent over an HTTPS connection
      * @param boolean $httponly     Flag of whether the cookie should only be accessible over the HTTP protocol
      * @return AbstractResponse
      */
     public function cookie(
-        $key,
-        $value = '',
-        $expiry = null,
-        $path = '/',
-        $domain = null,
-        $secure = false,
-        $httponly = false
-    ) {
+        string      $key,
+        string      $value = '',
+        int|null    $expiry = null,
+        string      $path = '/',
+        string|null $domain = null,
+        bool        $secure = false,
+        bool        $httponly = false
+    ): AbstractResponse
+    {
         if (null === $expiry) {
             $expiry = time() + (3600 * 24 * 30);
         }
@@ -503,7 +503,7 @@ abstract class AbstractResponse
      *
      * @return AbstractResponse
      */
-    public function noCache()
+    public function noCache(): AbstractResponse
     {
         $this->header('Pragma', 'no-cache');
         $this->header('Cache-Control', 'no-store, no-cache');
@@ -518,7 +518,7 @@ abstract class AbstractResponse
      * @param int $code     The HTTP status code to use for redirection
      * @return AbstractResponse
      */
-    public function redirect($url, $code = 302)
+    public function redirect(string $url, int $code = 302): AbstractResponse
     {
         $this->code($code);
         $this->header('Location', $url);
