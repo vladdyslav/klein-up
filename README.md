@@ -1,13 +1,13 @@
 # Klein.php
 
-**klein-up** is a fork of popular **klein.php** fast & flexible router, adopted for PHP 8.1+
+**klein-up** is a fork of popular **klein.php** fast & flexible router, adopted for PHP 8.2+
 
 * Flexible regular expression routing (inspired by [Sinatra](http://www.sinatrarb.com/))
 * A set of [boilerplate methods](#api) for rapidly building web apps
 
 ## Getting started
 
-1. PHP 8.1.x is required
+1. PHP 8.2.x is required
 2. Install Klein using [Composer](#composer-installation) (recommended) or manually
 3. Setup URL rewriting so that all requests are handled by **index.php**
 
