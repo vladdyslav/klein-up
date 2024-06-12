@@ -11,7 +11,6 @@
 
 namespace Klein;
 
-use AllowDynamicProperties;
 use BadMethodCallException;
 use Klein\Exceptions\DuplicateServiceException;
 use Klein\Exceptions\UnknownServiceException;
