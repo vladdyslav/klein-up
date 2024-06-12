@@ -11,6 +11,7 @@
 
 namespace Klein;
 
+use AllowDynamicProperties;
 use BadMethodCallException;
 use Klein\Exceptions\DuplicateServiceException;
 use Klein\Exceptions\UnknownServiceException;
@@ -31,6 +32,8 @@ class App
      * @type array
      */
     protected $services = array();
+
+    public string $state = '';
 
     /**
      * Magic "__get" method
